@@ -101,19 +101,30 @@ export const getAITestCase = createAsyncThunk(
     )=>{
         dispatch(
             makeApiRequestInQueue({
-                // @ts-ignore
                 apiRequest: async ()=>{
                     const GTAState = getGTAState(getState())
                     const { rawCode } = GTAState || {}
-                    console.log(`rawCode`, rawCode)
                     const prompt = testCasePrompt(rawCode)
                     return await fetchAITestCase({
                         prompt,
+                        // isStream: true,
+                        queryQwen: true,
+                        queryGeminiPro: true,
                     })
                 },
                 asyncThunk: getAITestCase,
             })
         )
+    }
+)
+
+export const getAITestCaseStream = createAsyncThunk(
+    "GTASlice/getAITestCaseStream",
+    async (
+        params: Record<string, any>,
+        { dispatch, getState }: any
+    )=>{
+
     }
 )
 
@@ -140,7 +151,6 @@ export const GTASlice = createSlice({
             if (action.payload as any) {
                 const { status, data } = (action.payload as any) || {}
                 if (status && data) {
-                    console.log("state.rawCode", data)
                     state.rawCode = data;
                 }
             } else {

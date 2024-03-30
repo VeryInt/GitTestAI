@@ -4,3 +4,5 @@ export const GTAClassNames = {
     base: baseClassName,
     root: `${baseClassName}-virtual-root`,
 }
+
+export const graphqlAIMashupUrl = `https://aimashup.moca.one/`

@@ -48,6 +48,7 @@
     ]
   },
   "dependencies": {
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@reduxjs/toolkit": "^2.2.2",
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
