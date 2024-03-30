@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice, original, PayloadAction } from '@reduxjs/toolkit'
 import type { AppState, AppThunk } from './store'
 import * as API from './API'
-import { fetchRawCodeByUrl } from './API'
+import { fetchRawCodeByUrl, fetchAITestCase } from './API'
 import { IGTAState } from './interface'
 import type { AsyncThunk } from '@reduxjs/toolkit'
 import _ from 'lodash'
+import { testCasePrompt } from '../utils/prompts'
 import dayjs from 'dayjs'
 
 // define a queue to store api request
@@ -92,6 +93,30 @@ export const getRawCode = createAsyncThunk(
     }
 )
 
+export const getAITestCase = createAsyncThunk(
+    "GTASlice/getAITestCase",
+    async (
+        params: Record<string, any>,
+        { dispatch, getState }: any
+    )=>{
+        dispatch(
+            makeApiRequestInQueue({
+                // @ts-ignore
+                apiRequest: async ()=>{
+                    const GTAState = getGTAState(getState())
+                    const { rawCode } = GTAState || {}
+                    console.log(`rawCode`, rawCode)
+                    const prompt = testCasePrompt(rawCode)
+                    return await fetchAITestCase({
+                        prompt,
+                    })
+                },
+                asyncThunk: getAITestCase,
+            })
+        )
+    }
+)
+
 export const GTASlice = createSlice({
     name: 'GTASlice',
     initialState,
@@ -115,8 +140,8 @@ export const GTASlice = createSlice({
             if (action.payload as any) {
                 const { status, data } = (action.payload as any) || {}
                 if (status && data) {
+                    console.log("state.rawCode", data)
                     state.rawCode = data;
-                    console.log("state.rawCode", state.rawCode)
                 }
             } else {
                 return { ...state }

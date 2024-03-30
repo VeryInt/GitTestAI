@@ -6,7 +6,7 @@ import { GTAVirtualRootId } from '../utils/constants'
 import { Provider } from 'react-redux'
 import store from './store'
 import { useAppSelector, useAppDispatch } from './hooks'
-import { getGTAState, getCurrentPageUrl, getRawCode } from './slice'
+import { getGTAState, getCurrentPageUrl, getRawCode, getAITestCase } from './slice'
 
 const App = () => {
     
@@ -45,5 +45,6 @@ const useSetInitialState = () => {
         console.log(`currentPageUrl`, currentPageUrl)
         dispatch(getCurrentPageUrl(currentPageUrl))
         dispatch(getRawCode({}))
+        dispatch(getAITestCase({}))
     }, [])
 }
