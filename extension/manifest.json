@@ -23,16 +23,17 @@
     },
     "web_accessible_resources": [
         {
-          "resources": ["inject-script.js", "icons/icon38.png"],
-          "matches": ["https://*.com/*"]
+            "resources": ["inject-script.js", "icons/icon38.png"],
+            "matches": ["https://*.com/*"]
         }
     ],
     "content_scripts": [
         {
-          "js": ["content-script.js"],
-          "matches": [
-            "https://*.com/*"
-          ]
+            "js": ["content-script.js"],
+            "run_at": "document_idle",
+            "matches": [
+                "https://*.com/*"
+              ]
         }
     ]
 }
