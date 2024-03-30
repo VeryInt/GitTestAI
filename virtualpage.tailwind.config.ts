@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-    important: '#git-test-ai-root',
+    important: '#git-test-ai-virtual-root',
     content: [
         './app/scripts/reactVirtual/**/*.{js,ts,jsx,tsx}',
         "./node_modules/tailwind-datepicker-react/dist/**/*.js", 

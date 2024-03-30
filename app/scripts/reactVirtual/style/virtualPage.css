@@ -1,19 +1,24 @@
 @config "../../../../virtualpage.tailwind.config.ts";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-img{
+#git-test-ai-virtual-root{
+    @tailwind base;
+    @tailwind components;
+    @tailwind utilities;
+}
+
+#git-test-ai-virtual-root img{
     display: inline;
     max-width: none;
 }
 
-*, :after, :before{
+#git-test-ai-virtual-root *,
+#git-test-ai-virtual-root :after,
+#git-test-ai-virtual-root :before{
     box-sizing: content-box;
 }
 
-#weibo-extend-virtual-root *,
-#weibo-extend-virtual-root *::before,
-#weibo-extend-virtual-root *::after {
+#git-test-ai-virtual-root *,
+#git-test-ai-virtual-root *::before,
+#git-test-ai-virtual-root *::after {
     box-sizing: border-box;
 }
