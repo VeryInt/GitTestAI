@@ -4,7 +4,7 @@
     "description": "GitTestAI",
     "version": "1.0",
     "permissions": [ "scripting", "storage"],
-    "host_permissions": [ "https://*.com/*"],
+    "host_permissions": ["https://gitlab.com/*","https://git.dev.sh.ctripcorp.com/*"],
     "icons": {
         "16": "icons/icon16.png",
         "48": "icons/icon48.png",
@@ -23,17 +23,15 @@
     },
     "web_accessible_resources": [
         {
-            "resources": ["inject-script.js", "icons/icon38.png"],
-            "matches": ["https://*.com/*"]
+            "resources": ["inject-script.js", "icons/icon38.png", "virtualPage.output.css"],
+            "matches": ["https://gitlab.com/*","https://git.dev.sh.ctripcorp.com/*"]
         }
     ],
     "content_scripts": [
         {
             "js": ["content-script.js"],
             "run_at": "document_idle",
-            "matches": [
-                "https://*.com/*"
-              ]
+            "matches": ["https://gitlab.com/*","https://git.dev.sh.ctripcorp.com/*"]
         }
     ]
 }
