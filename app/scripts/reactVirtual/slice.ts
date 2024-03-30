@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, original, PayloadAction } from '@reduxjs/toolkit'
 import type { AppState, AppThunk } from './store'
 import * as API from './API'
+import { fetchRawCodeByUrl } from './API'
 import { IGTAState } from './interface'
 import type { AsyncThunk } from '@reduxjs/toolkit'
 import _ from 'lodash'
@@ -70,10 +71,34 @@ const makeApiRequestInQueue = createAsyncThunk(
     }
 )
 
+export const getRawCode = createAsyncThunk(
+    "GTASlice/getRawCode",
+    async (
+        params: Record<string, any>,
+        { dispatch, getState }: any
+    ) => {
+        const GTAState = getGTAState(getState())
+        const { currentPageUrl } = GTAState || {}
+        const rawCodeUrl = currentPageUrl.replace(/\/blob\//, "/raw/")
+        // const rawCodeResult = await fetchRawCodeByUrl({ url: currentPageUrl })
+        dispatch(
+            makeApiRequestInQueue({
+                apiRequest: fetchRawCodeByUrl.bind(null, {
+                    url: rawCodeUrl
+                }),
+                asyncThunk: getRawCode,
+            })
+        )
+    }
+)
+
 export const GTASlice = createSlice({
     name: 'GTASlice',
     initialState,
     reducers: {
+        getCurrentPageUrl: (state, action: PayloadAction<string>) => {
+            state.currentPageUrl = action.payload
+        },
         setRequestInQueueFetching: (state, action: PayloadAction<boolean>) => {
             state.requestInQueueFetching = action.payload
         },
@@ -86,11 +111,23 @@ export const GTASlice = createSlice({
         },
     },
     extraReducers: builder => {
+        builder.addCase(getRawCode.fulfilled, (state, action) => {
+            if (action.payload as any) {
+                const { status, data } = (action.payload as any) || {}
+                if (status && data) {
+                    state.rawCode = data;
+                    console.log("state.rawCode", state.rawCode)
+                }
+            } else {
+                return { ...state }
+            }
+        })
     },
 })
 
 // export actions
 export const {
+    getCurrentPageUrl,
     updateState,
     clearRequestQueue,
 } = GTASlice.actions
