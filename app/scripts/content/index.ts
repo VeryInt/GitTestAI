@@ -6,7 +6,7 @@ import Cookies from 'js-cookie'
 
 
 const contentRun = async () => {
-    console.log(`this is contentRun`)
+    console.log(`this is GTA contentRun`)
 }
 
 
@@ -18,3 +18,13 @@ window.addEventListener('load', () => {
 
     contentRun()
 })
+
+window.addEventListener("message", function(event) {
+    const data = event?.data || {}
+    const { source, messageInfo } = data || {};
+    if(source == `git-test-ai`){
+        console.log(`messageInfo from ${source}`, data)
+    }
+    return;
+})
+

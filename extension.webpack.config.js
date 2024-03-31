@@ -22,7 +22,7 @@ module.exports = {
         filename: '[name]-script.js',
     },
     resolve: {
-        extensions: ['.ts', '.js'], // 解析的文件扩展名包括 .ts 和 .js
+        extensions: ['.ts', '.js', '.tsx'], // 解析的文件扩展名包括 .ts 和 .js
     },
     plugins: [
         new CleanWebpackPlugin({
@@ -39,13 +39,31 @@ module.exports = {
                     compilerOptions: {
                         target: 'es5',
                         noEmit: false,
-                        baseUrl: '.',
-                        paths: {
-                            "@/*": ["./*"]
-                        }
-                      }
+                    },
                 },
                 exclude: /node_modules/,
+            },
+            {
+                test: /\.tsx$/,
+                exclude: /node_modules/,
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: ['@babel/preset-env', '@babel/preset-react'],
+                        },
+                    },
+                    {
+                        loader: 'ts-loader',
+                        options: {
+                            // transpileOnly: true,
+                            compilerOptions: {
+                                target: 'es5',
+                                noEmit: false,
+                            },
+                        },
+                    },
+                ],
             },
         ],
     },

@@ -15,3 +15,24 @@
     }
     console.log(history.pushState)
 })(history)
+
+
+
+const injectInit = ()=>{
+    console.log(`this GTA inject script!!!`)
+
+    if(typeof injectScript === 'undefined'){
+        // @ts-ignore
+        window.injectScript = async (requestArgs: Record<string, any>) => {
+            const { source, messageInfo } = requestArgs || {};
+            console.log(`injectScript get data then post message`, source)
+            window.postMessage({source, messageInfo: {
+                ...messageInfo,
+                // @ts-ignore
+                documentSelection: window.getSelection().toString().trim(),
+            }})
+        }
+    }
+}
+
+injectInit()

@@ -7,7 +7,6 @@ import { Provider } from 'react-redux'
 import store from './store'
 import { useAppSelector, useAppDispatch } from './hooks'
 import { getGTAState, getCurrentPageUrl, getRawCode, getAITestCase } from './slice'
-import './globals.css'
 
 const App = () => {
     
