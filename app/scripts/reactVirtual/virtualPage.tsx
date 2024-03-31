@@ -45,6 +45,6 @@ const useSetInitialState = () => {
         console.log(`currentPageUrl`, currentPageUrl)
         dispatch(getCurrentPageUrl(currentPageUrl))
         dispatch(getRawCode({}))
-        dispatch(getAITestCase({}))
+        // dispatch(getAITestCase({}))
     }, [])
 }

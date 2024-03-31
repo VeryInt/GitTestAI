@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, original, PayloadAction } from '@reduxjs/toolkit'
 import type { AppState, AppThunk } from './store'
 import * as API from './API'
-import { fetchRawCodeByUrl, fetchAITestCase } from './API'
+import { fetchRawCodeByUrl, fetchAITestCase, fetchAITestCaseStream } from './API'
 import { IGTAState } from './interface'
 import type { AsyncThunk } from '@reduxjs/toolkit'
 import _ from 'lodash'
@@ -124,7 +124,20 @@ export const getAITestCaseStream = createAsyncThunk(
         params: Record<string, any>,
         { dispatch, getState }: any
     )=>{
-
+        const GTAState = getGTAState(getState())
+        const { rawCode } = GTAState || {}
+        const prompt = testCasePrompt(rawCode)
+        const streamHandler = ({data, status}: {data: Record<string, any>, status?: boolean})=>{
+            console.log(`getAITestCaseStream`, status)
+            console.log(`getAITestCaseStream`, data)
+        }
+        await fetchAITestCaseStream({
+            prompt,
+            isStream: true,
+            queryQwen: true,
+            queryGeminiPro: true,
+            streamHandler,
+        })
     }
 )
 

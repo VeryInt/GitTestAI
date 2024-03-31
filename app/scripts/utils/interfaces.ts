@@ -17,4 +17,6 @@ export interface IGrahpqlAIFetchProps {
     openAIParams?: Record<string, any>
     queryLingyiwanwu?: boolean
     lingyiwanwuParams?: Record<string, any>
+    streamHandler?: (data: any) => void
+    completeHandler?: (data: any) => void
 }

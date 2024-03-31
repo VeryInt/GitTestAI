@@ -79,10 +79,12 @@ export const fetchAITestCase = async (paramsForAIGraphql: IGrahpqlAIFetchProps) 
     }
 }
 
+const abortController = new AbortController()
 export const fetchAITestCaseStream = async (paramsForAIGraphql: IGrahpqlAIFetchProps) => {
     const graphqlUrl = graphqlAIMashupUrl
+    const { streamHandler, completeHandler, ...rest} = paramsForAIGraphql || {}
     const body = getGraphqlAIMashupBody({
-        ...paramsForAIGraphql,
+        ...rest,
         name: `GetAiTestCasesQuery`
     })
     try{
@@ -92,7 +94,31 @@ export const fetchAITestCaseStream = async (paramsForAIGraphql: IGrahpqlAIFetchP
             body: JSON.stringify(body),
             onmessage(ev) {
                 console.log(ev.data);
-            }
+                const data = ev?.data || {}
+                if(streamHandler){
+                    streamHandler({
+                        data,
+                        status: true,
+                    });
+                }
+            },
+            onclose() {
+                if(completeHandler){
+                    completeHandler({
+                        data: null,
+                        status: true,
+                    });
+                }
+            },
+            onerror(err) {
+                if(completeHandler){
+                    completeHandler({
+                        err,
+                        status: false,
+                    });
+                }
+            },
+            signal: abortController.signal
         });
     }catch(e){
         console.log(`fetchAITestCase`, e)
