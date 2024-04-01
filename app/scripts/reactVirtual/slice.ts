@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, original, PayloadAction } from '@reduxjs
 import type { AppState, AppThunk } from './store'
 import * as API from './API'
 import { fetchRawCodeByUrl, fetchAITestCase, fetchAITestCaseStream } from './API'
-import { IGTAState } from './interface'
+import { IGTAState, ChatKey } from './interface'
 import type { AsyncThunk } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import { testCasePrompt } from '../utils/prompts'
@@ -121,20 +121,34 @@ export const getAITestCase = createAsyncThunk(
 export const getAITestCaseStream = createAsyncThunk(
     "GTASlice/getAITestCaseStream",
     async (
-        params: Record<string, any>,
+        {selection}: {selection?: string},
         { dispatch, getState }: any
     )=>{
         const GTAState = getGTAState(getState())
-        const { rawCode } = GTAState || {}
-        const prompt = testCasePrompt(rawCode)
-        const streamHandler = ({data, status}: {data: Record<string, any>, status?: boolean})=>{
-            console.log(`getAITestCaseStream`, status)
-            console.log(`getAITestCaseStream`, data)
+        const { rawCode, chats } = GTAState || {}
+        const code = selection || rawCode
+        const prompt = testCasePrompt(code)
+        let newChats = {...chats}
+        const streamHandler = ({data, status}: {data: string, status?: boolean})=>{
+            try{
+                const {hasNext, incremental} = JSON.parse(data) || {}
+                console.log(`incremental`, incremental)
+                _.map(incremental, ({items, path}: {items: string[], path: (string | Number)[]})=>{
+                    const [chat, aiType, index] = path as [string, ChatKey, Number]
+                    console.log(`incremental in `, aiType, path, items)
+                    newChats[aiType] = `${newChats[aiType] || ''} ${items.join("")}`
+                })
+                console.log(`newChats result`, newChats)
+            }catch(e){
+
+            }
+
         }
         await fetchAITestCaseStream({
             prompt,
             isStream: true,
-            queryQwen: true,
+            // queryQwen: true,
+            queryGroq: true,
             queryGeminiPro: true,
             streamHandler,
         })

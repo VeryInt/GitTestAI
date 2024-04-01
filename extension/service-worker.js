@@ -62,13 +62,4 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
         //     console.log(response.farewell);
         // });
     });
-
-    // chrome.scripting.executeScript({
-    //     target: { tabId },
-    //     world: "MAIN", 
-    //     args: [{source: "git-test-ai", messageInfo: {
-    //         selectionText
-    //     }}],
-    //     func: (...args) => injectScript(...args),
-    //   });
 });

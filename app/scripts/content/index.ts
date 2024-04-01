@@ -3,6 +3,7 @@ import store from '../reactVirtual/store'
 import _ from 'lodash'
 // @ts-ignore
 import Cookies from 'js-cookie'
+import { getAITestCaseStream } from '../reactVirtual/slice'
 
 
 const contentRun = async () => {
@@ -24,6 +25,10 @@ window.addEventListener("message", function(event) {
     const { source, messageInfo } = data || {};
     if(source == `git-test-ai`){
         console.log(`messageInfo from ${source}`, data)
+        const { documentSelection } = data || {}
+        store.dispatch(getAITestCaseStream({
+            selection: documentSelection
+        }))
     }
     return;
 })

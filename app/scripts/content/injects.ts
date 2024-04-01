@@ -25,10 +25,15 @@ export const injectVirtualStyle = () => {
     document.body?.appendChild(linkStyleElment)
 }
 
-export const injectVirtualRoot = () => {
-    var virtualRoot = document.createElement('div')
-    virtualRoot.className = GTAClassNames.root
-    virtualRoot.id = GTAVirtualRootId
-    document.body.appendChild(virtualRoot)
-    renderVirtualPage()
+export const injectVirtualRoot = (selection?: string) => {
+    if(!document.querySelector(`#${GTAVirtualRootId}`)){
+        var virtualRoot = document.createElement('div')
+        virtualRoot.className = GTAClassNames.root
+        virtualRoot.id = GTAVirtualRootId
+        document.body.appendChild(virtualRoot)
+    }
+    
+    renderVirtualPage({
+        selection
+    })
 }

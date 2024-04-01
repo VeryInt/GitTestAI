@@ -1,15 +1,14 @@
 'use client'
 import React, { useEffect } from 'react'
 import _ from 'lodash'
-import { createRoot } from 'react-dom/client'
+import { createRoot, Root } from 'react-dom/client'
 import { GTAVirtualRootId } from '../utils/constants'
 import { Provider } from 'react-redux'
 import store from './store'
 import { useAppSelector, useAppDispatch } from './hooks'
-import { getGTAState, getCurrentPageUrl, getRawCode, getAITestCase } from './slice'
+import { getGTAState, getCurrentPageUrl, getRawCode, getAITestCase, updateState } from './slice'
 
 const App = () => {
-    
     return (
         <Provider store={store}>
             <VirtualRoot />
@@ -17,24 +16,26 @@ const App = () => {
     )
 }
 
-export const renderVirtualPage = () => {
+let root: Root;
+export const renderVirtualPage = ({selection}: {selection?: string}) => {
     const virtualRoot = document.getElementById(GTAVirtualRootId) as HTMLElement
-    const root = createRoot(virtualRoot)
+    root = createRoot(virtualRoot)
     root.render(
         <div className="left-0 top-0">
-            <App />
+            <Provider store={store}>
+                <VirtualRoot selection={selection}/>
+            </Provider>
         </div>
     )
 }
 
-const VirtualRoot = ()=>{
-    useSetInitialState()
+const VirtualRoot = ({selection}: {selection?: string})=>{
+    useSetInitialState({selection})
     return <div id="root">
-
     </div>
 }
 
-const useSetInitialState = () => {
+const useSetInitialState = ({selection}: {selection?: string}) => {
     const state = useAppSelector(getGTAState)
     const dispatch = useAppDispatch()
     useEffect(() => {
@@ -45,6 +46,7 @@ const useSetInitialState = () => {
         console.log(`currentPageUrl`, currentPageUrl)
         dispatch(getCurrentPageUrl(currentPageUrl))
         dispatch(getRawCode({}))
+        dispatch(updateState({selection}))
         // dispatch(getAITestCase({}))
     }, [])
 }
