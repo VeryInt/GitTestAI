@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import { useAppSelector, useAppDispatch } from './hooks'
 import { getGTAState, getCurrentPageUrl, getRawCode, getAITestCase, updateState } from './slice'
+import CaseShow from './modules/CaseShow'
 
 const App = () => {
     return (
@@ -31,8 +32,16 @@ export const renderVirtualPage = ({selection}: {selection?: string}) => {
 
 const VirtualRoot = ({selection}: {selection?: string})=>{
     useSetInitialState({selection})
-    return <div id="root">
-    </div>
+    const state = useAppSelector(getGTAState)
+    const dispatch = useAppDispatch()
+    const { chats } = state || {}
+    const { Groq } = chats || {}
+    
+    return (
+        <div id="root">
+            <CaseShow content={Groq || ''} open={true} />
+        </div>
+    )
 }
 
 const useSetInitialState = ({selection}: {selection?: string}) => {
@@ -47,6 +56,5 @@ const useSetInitialState = ({selection}: {selection?: string}) => {
         dispatch(getCurrentPageUrl(currentPageUrl))
         dispatch(getRawCode({}))
         dispatch(updateState({selection}))
-        // dispatch(getAITestCase({}))
     }, [])
 }

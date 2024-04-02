@@ -128,17 +128,22 @@ export const getAITestCaseStream = createAsyncThunk(
         const { rawCode, chats } = GTAState || {}
         const code = selection || rawCode
         const prompt = testCasePrompt(code)
-        let newChats = {...chats}
+        let newChats: Partial<Record<ChatKey, any>> =  {};
         const streamHandler = ({data, status}: {data: string, status?: boolean})=>{
             try{
                 const {hasNext, incremental} = JSON.parse(data) || {}
                 console.log(`incremental`, incremental)
                 _.map(incremental, ({items, path}: {items: string[], path: (string | Number)[]})=>{
-                    const [chat, aiType, index] = path as [string, ChatKey, Number]
-                    console.log(`incremental in `, aiType, path, items)
-                    newChats[aiType] = `${newChats[aiType] || ''} ${items.join("")}`
+                    const [chat, aiType, index] = path as [string, String, Number]
+                    const theAiType = _.find(Object.values(ChatKey), value => {
+                        return aiType.startsWith(value)
+                    });
+                    if(theAiType){
+                        newChats[theAiType] = `${newChats[theAiType] || ''}${items.join("")}`
+                    }
                 })
-                console.log(`newChats result`, newChats)
+
+                dispatch(updateState({chats: {...newChats}}))
             }catch(e){
 
             }
@@ -149,7 +154,7 @@ export const getAITestCaseStream = createAsyncThunk(
             isStream: true,
             // queryQwen: true,
             queryGroq: true,
-            queryGeminiPro: true,
+            // queryGeminiPro: true,
             streamHandler,
         })
     }

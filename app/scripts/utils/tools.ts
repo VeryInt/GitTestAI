@@ -13,10 +13,13 @@ export const getGraphqlAIMashupBody = ({ prompt, name, isStream, queryQwen, qwen
     let paramsList = [`$params: ChatArgs`],
         queryList = [], 
         variables: Record<string, any> = {
-            params: {messages: [{
-                role: "user",
-                content: prompt
-            }]}
+            params: {
+                messages: [{
+                    role: "user",
+                    content: prompt
+                }],
+                maxTokens: 2048
+            }
         }
     if(queryQwen){
         let paramsQwen = '', hasQwenArgs = qwenParams;
