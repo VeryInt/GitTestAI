@@ -34,12 +34,16 @@ const VirtualRoot = ({selection}: {selection?: string})=>{
     useSetInitialState({selection})
     const state = useAppSelector(getGTAState)
     const dispatch = useAppDispatch()
-    const { chats } = state || {}
+    const { chats, openCaseShow } = state || {}
     const { Groq } = chats || {}
-    
+
+    const handleOpenChange = (isOpen: boolean)=>{
+        console.log(`isOpen`, isOpen)
+        dispatch(updateState({openCaseShow: isOpen}))
+    }
     return (
         <div id="root">
-            <CaseShow content={Groq || ''} open={true} />
+            <CaseShow content={Groq || ''} open={openCaseShow} callbackOnOpenChange={handleOpenChange} />
         </div>
     )
 }

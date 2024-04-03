@@ -31,7 +31,7 @@ chrome.scripting.registerContentScripts([
 
 chrome.contextMenus.create({
     id: 'git-test-ai-context-menu-runtest',
-    title: 'GitTestAi-获取测试用例', // 菜单项的文本
+    title: 'GitTestAi - 获取测试用例', // 菜单项的文本
     contexts: ['all'] // 菜单项显示的上下文环境，'all' 表示所有页面
 });
   

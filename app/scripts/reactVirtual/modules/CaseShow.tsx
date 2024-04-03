@@ -11,7 +11,7 @@ import {
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
-  } from "@/app/components/ui/drawer"
+  } from "../../../../app/components/ui/drawer"
 import { PointerDownOutsideEvent, FocusOutsideEvent } from '@radix-ui/react-dismissable-layer'
 import ReactMarkdown from 'react-markdown'
 import SyntaxHighlighter from 'react-syntax-highlighter'
@@ -22,30 +22,44 @@ import rehypeRaw from 'rehype-raw'
 interface ICaseShowProps {
     open?: boolean
     content?: string
+    callbackOnOpenChange?: (isOpen: boolean) => void
 }
-export default function CaseShow ({open, content}: ICaseShowProps){
-    const [openDrawer, setOpenDrawer] = useState(false)
+export default function CaseShow ({open = false, content, callbackOnOpenChange}: ICaseShowProps){
+    const [openDrawer, setOpenDrawer] = useState(open)
     useEffect(()=>{
-        setOpenDrawer(!!open)
+        if(open){
+            setOpenDrawer(true)
+        }
     }, [open])
 
     const handleInteractOutside = (event: PointerDownOutsideEvent | FocusOutsideEvent) => {
         console.log(`event`, event)
         setOpenDrawer(true)
     }
+
+    const handleOpenChange = (shouldOpen: boolean)=>{
+        // const nextOpen = !openDrawer
+        // setOpenDrawer(nextOpen)
+        if(callbackOnOpenChange){
+            callbackOnOpenChange(shouldOpen)
+        }
+        setOpenDrawer(shouldOpen)
+    }
+
     if(!content){
         return null
     }
 
     return (
         <div>
-            <Drawer direction="right" open={openDrawer} onOpenChange={setOpenDrawer} >
+            <Drawer direction="right" open={openDrawer} onOpenChange={handleOpenChange} >
                 <DrawerPortal>
-                    <DrawerContent direction="right" className="bg-white flex flex-col rounded-t-[10px] h-full w-[30rem] mt-24 fixed bottom-0 right-0 !left-auto z-[9999] " onInteractOutside={handleInteractOutside}>
+                    
+                    <DrawerContent direction="right" className="bg-white flex flex-col rounded-t-[10px] h-full w-[50rem] mt-24 fixed bottom-0 right-0 !left-auto z-[9999] " onInteractOutside={handleInteractOutside}>
                     <div className="p-4 bg-white flex-1 overflow-y-scroll overflow-x-hidden">
-                        <div className="max-w-md mx-auto my-5">
+                        <div className="mx-5 my-5">
                         <DrawerTitle className="font-medium mb-4">
-                            Unstyled drawer for React.
+                            Test Result
                         </DrawerTitle>
                             <ReactMarkdown
                                 rehypePlugins={[rehypeRaw]}
@@ -85,6 +99,7 @@ export default function CaseShow ({open, content}: ICaseShowProps){
                     </button>
                     </DrawerClose>
                     </DrawerContent>
+                    <DrawerOverlay className='bg-black/60 z-9998 inset-0' />
                 </DrawerPortal>
             </Drawer>
 

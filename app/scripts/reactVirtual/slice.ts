@@ -143,7 +143,7 @@ export const getAITestCaseStream = createAsyncThunk(
                     }
                 })
 
-                dispatch(updateState({chats: {...newChats}}))
+                dispatch(updateState({chats: {...newChats}, openCaseShow: true}))
             }catch(e){
 
             }
