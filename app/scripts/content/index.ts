@@ -24,8 +24,8 @@ window.addEventListener("message", function(event) {
     const data = event?.data || {}
     const { source, messageInfo } = data || {};
     if(source == `git-test-ai`){
-        console.log(`messageInfo from ${source}`, data)
-        const { documentSelection } = data || {}
+        console.log(`messageInfo from ${source}`, messageInfo)
+        const { documentSelection } = messageInfo || {}
         store.dispatch(getAITestCaseStream({
             selection: documentSelection
         }))

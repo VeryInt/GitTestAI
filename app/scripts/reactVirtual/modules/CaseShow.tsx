@@ -18,6 +18,8 @@ import SyntaxHighlighter from 'react-syntax-highlighter'
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs'
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
 import rehypeRaw from 'rehype-raw'
+import { Button } from "../../../../app/components/ui/button"
+
 
 interface ICaseShowProps {
     open?: boolean
@@ -54,13 +56,13 @@ export default function CaseShow ({open = false, content, callbackOnOpenChange}:
         <div>
             <Drawer direction="right" open={openDrawer} onOpenChange={handleOpenChange} >
                 <DrawerPortal>
-                    
+                    <DrawerOverlay className='bg-black/60 z-[9998]' />
                     <DrawerContent direction="right" className="bg-white flex flex-col rounded-t-[10px] h-full w-[50rem] mt-24 fixed bottom-0 right-0 !left-auto z-[9999] " onInteractOutside={handleInteractOutside}>
-                    <div className="p-4 bg-white flex-1 overflow-y-scroll overflow-x-hidden">
-                        <div className="mx-5 my-5">
-                        <DrawerTitle className="font-medium mb-4">
+                    <div className="pb-4 px-4 bg-white flex-1 overflow-y-scroll overflow-x-hidden mt-8">
+                        <DrawerTitle className="font-medium mb-2">
                             Test Result
                         </DrawerTitle>
+                        <div className="mx-2 my-5">
                             <ReactMarkdown
                                 rehypePlugins={[rehypeRaw]}
                                 components={{
@@ -94,12 +96,10 @@ export default function CaseShow ({open = false, content, callbackOnOpenChange}:
                         </div>
                     </div>
                     <DrawerClose asChild>
-                    <button className="IconButton absolute top-2 left-2" aria-label="Close">
-                        Close
-                    </button>
+                        <Button variant="secondary" className=' absolute top-2 left-6 rounded-lg'>Close</Button>
                     </DrawerClose>
                     </DrawerContent>
-                    <DrawerOverlay className='bg-black/60 z-9998 inset-0' />
+                    
                 </DrawerPortal>
             </Drawer>
 
